@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
@@ -16,7 +17,8 @@ import {
   Terminal,
   Activity,
   Wifi,
-  Lock
+  Lock,
+  LogOut
 } from "lucide-react";
 
 interface ScanResult {
@@ -49,12 +51,18 @@ const commonPorts: Record<number, string> = {
 };
 
 export default function Home() {
+  const [, setLocation] = useLocation();
   const [target, setTarget] = useState("");
   const [portRange, setPortRange] = useState("1-1000");
   const [isScanning, setIsScanning] = useState(false);
   const [progress, setProgress] = useState(0);
   const [results, setResults] = useState<ScanResult[]>([]);
   const [scanLog, setScanLog] = useState<string[]>([]);
+
+  const handleLogout = () => {
+    localStorage.removeItem("netscan_auth");
+    setLocation("/");
+  };
 
   const simulateScan = () => {
     if (!target) return;
@@ -134,21 +142,31 @@ export default function Home() {
         <motion.header 
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-12"
+          className="flex items-center justify-between mb-12"
         >
-          <div className="flex items-center justify-center gap-3 mb-4">
+          <div className="flex items-center gap-3">
             <div className="p-3 rounded-xl bg-primary/10 border border-primary/30 glow-cyan">
               <Radar className="w-8 h-8 text-primary" />
             </div>
-            <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
-              <span className="text-foreground">Net</span>
-              <span className="text-primary glow-text">Scan</span>
-              <span className="text-muted-foreground font-light ml-2">Pro</span>
-            </h1>
+            <div>
+              <h1 className="text-3xl md:text-4xl font-bold tracking-tight">
+                <span className="text-foreground">Shadow</span>
+                <span className="text-primary glow-text">Scan</span>
+              </h1>
+              <p className="text-muted-foreground font-mono text-xs">
+                Network Intelligence Platform
+              </p>
+            </div>
           </div>
-          <p className="text-muted-foreground font-mono text-sm">
-            Advanced Network Port Scanner • Real-time Analysis
-          </p>
+          <Button
+            data-testid="button-logout"
+            onClick={handleLogout}
+            variant="outline"
+            className="bg-secondary/50 border-border hover:bg-destructive/20 hover:border-destructive/50 hover:text-red-400 transition-all"
+          >
+            <LogOut className="w-4 h-4 mr-2" />
+            Logout
+          </Button>
         </motion.header>
 
         <motion.div
@@ -351,7 +369,7 @@ export default function Home() {
           transition={{ delay: 0.5 }}
           className="text-center mt-12 text-muted-foreground text-sm font-mono"
         >
-          <p>NetScan Pro • For authorized security testing only</p>
+          <p>ShadowScan • For authorized security testing only</p>
         </motion.footer>
       </div>
     </div>
