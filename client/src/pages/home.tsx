@@ -150,11 +150,11 @@ export default function Home() {
             </div>
             <div>
               <h1 className="text-3xl md:text-4xl font-bold tracking-tight">
-                <span className="text-foreground">Shadow</span>
-                <span className="text-primary glow-text">Scan</span>
+                <span className="text-foreground">Port-Scan</span>
+                <span className="text-primary glow-text">-Flask</span>
               </h1>
               <p className="text-muted-foreground font-mono text-xs">
-                Network Intelligence Platform
+                Flask-Powered Network Port Scanner
               </p>
             </div>
           </div>
